@@ -50,8 +50,8 @@ public class Player extends Entity{
 
 
     public void setDefaultValues(){
-//        setWorldX(100);
-//        setWorldY(100);
+        setWorldX(GamePanel.SCREEN_WIDTH/2);
+        setWorldY(GamePanel.SCREEN_HEIGHT/2);
         setSpeed(4);
         setDirection("down");
     }
@@ -60,21 +60,21 @@ public class Player extends Entity{
         try{
             setSpriteSheet(ImageIO.read(new FileInputStream("resources/player/player_sheet.png")));
             BufferedImage spriteSheet = getSpriteSheet();
-            upAnimation[0] = spriteSheet.getSubimage(0, GamePanel.PLAYER_SIZE * 3, GamePanel.PLAYER_SIZE, GamePanel.PLAYER_SIZE);
-            upAnimation[1] = spriteSheet.getSubimage(GamePanel.PLAYER_SIZE, GamePanel.PLAYER_SIZE * 3, GamePanel.PLAYER_SIZE, GamePanel.PLAYER_SIZE);
-            upAnimation[2] = spriteSheet.getSubimage(GamePanel.PLAYER_SIZE * 2, GamePanel.PLAYER_SIZE * 3, GamePanel.PLAYER_SIZE, GamePanel.PLAYER_SIZE);
+            upAnimation[0] = spriteSheet.getSubimage(0, GamePanel.ORIGINAL_PLAYER_SIZE * 3, GamePanel.ORIGINAL_PLAYER_SIZE, GamePanel.ORIGINAL_PLAYER_SIZE);
+            upAnimation[1] = spriteSheet.getSubimage(GamePanel.ORIGINAL_PLAYER_SIZE, GamePanel.ORIGINAL_PLAYER_SIZE * 3, GamePanel.ORIGINAL_PLAYER_SIZE, GamePanel.ORIGINAL_PLAYER_SIZE);
+            upAnimation[2] = spriteSheet.getSubimage(GamePanel.ORIGINAL_PLAYER_SIZE * 2, GamePanel.ORIGINAL_PLAYER_SIZE * 3, GamePanel.ORIGINAL_PLAYER_SIZE, GamePanel.ORIGINAL_PLAYER_SIZE);
 
-            downAnimation[0] = spriteSheet.getSubimage(0, 0, GamePanel.PLAYER_SIZE, GamePanel.PLAYER_SIZE);
-            downAnimation[1] = spriteSheet.getSubimage(GamePanel.PLAYER_SIZE, 0, GamePanel.PLAYER_SIZE, GamePanel.PLAYER_SIZE);
-            downAnimation[2] = spriteSheet.getSubimage(GamePanel.PLAYER_SIZE * 2, 0, GamePanel.PLAYER_SIZE, GamePanel.PLAYER_SIZE);
+            downAnimation[0] = spriteSheet.getSubimage(0, 0, GamePanel.ORIGINAL_PLAYER_SIZE, GamePanel.ORIGINAL_PLAYER_SIZE);
+            downAnimation[1] = spriteSheet.getSubimage(GamePanel.ORIGINAL_PLAYER_SIZE, 0, GamePanel.ORIGINAL_PLAYER_SIZE, GamePanel.ORIGINAL_PLAYER_SIZE);
+            downAnimation[2] = spriteSheet.getSubimage(GamePanel.ORIGINAL_PLAYER_SIZE * 2, 0, GamePanel.ORIGINAL_PLAYER_SIZE, GamePanel.ORIGINAL_PLAYER_SIZE);
 
-            leftAnimation[0] = spriteSheet.getSubimage(0, GamePanel.PLAYER_SIZE, GamePanel.PLAYER_SIZE, GamePanel.PLAYER_SIZE);
-            leftAnimation[1] = spriteSheet.getSubimage(GamePanel.PLAYER_SIZE, GamePanel.PLAYER_SIZE, GamePanel.PLAYER_SIZE, GamePanel.PLAYER_SIZE);
-            leftAnimation[2] = spriteSheet.getSubimage(GamePanel.PLAYER_SIZE * 2, GamePanel.PLAYER_SIZE, GamePanel.PLAYER_SIZE, GamePanel.PLAYER_SIZE);
+            leftAnimation[0] = spriteSheet.getSubimage(0, GamePanel.ORIGINAL_PLAYER_SIZE, GamePanel.ORIGINAL_PLAYER_SIZE, GamePanel.ORIGINAL_PLAYER_SIZE);
+            leftAnimation[1] = spriteSheet.getSubimage(GamePanel.ORIGINAL_PLAYER_SIZE, GamePanel.ORIGINAL_PLAYER_SIZE, GamePanel.ORIGINAL_PLAYER_SIZE, GamePanel.ORIGINAL_PLAYER_SIZE);
+            leftAnimation[2] = spriteSheet.getSubimage(GamePanel.ORIGINAL_PLAYER_SIZE * 2, GamePanel.ORIGINAL_PLAYER_SIZE, GamePanel.ORIGINAL_PLAYER_SIZE, GamePanel.ORIGINAL_PLAYER_SIZE);
 
-            rightAnimation[0] = spriteSheet.getSubimage(0, GamePanel.PLAYER_SIZE * 2, GamePanel.PLAYER_SIZE, GamePanel.PLAYER_SIZE);
-            rightAnimation[1] = spriteSheet.getSubimage(GamePanel.PLAYER_SIZE, GamePanel.PLAYER_SIZE * 2, GamePanel.PLAYER_SIZE, GamePanel.PLAYER_SIZE);
-            rightAnimation[2] = spriteSheet.getSubimage(GamePanel.PLAYER_SIZE * 2, GamePanel.PLAYER_SIZE * 2, GamePanel.PLAYER_SIZE, GamePanel.PLAYER_SIZE);
+            rightAnimation[0] = spriteSheet.getSubimage(0, GamePanel.ORIGINAL_PLAYER_SIZE * 2, GamePanel.ORIGINAL_PLAYER_SIZE, GamePanel.ORIGINAL_PLAYER_SIZE);
+            rightAnimation[1] = spriteSheet.getSubimage(GamePanel.ORIGINAL_PLAYER_SIZE, GamePanel.ORIGINAL_PLAYER_SIZE * 2, GamePanel.ORIGINAL_PLAYER_SIZE, GamePanel.ORIGINAL_PLAYER_SIZE);
+            rightAnimation[2] = spriteSheet.getSubimage(GamePanel.ORIGINAL_PLAYER_SIZE * 2, GamePanel.ORIGINAL_PLAYER_SIZE * 2, GamePanel.ORIGINAL_PLAYER_SIZE, GamePanel.ORIGINAL_PLAYER_SIZE);
 
             for(int index = 0; index < playerAnimations.size(); index++){
                 BufferedImage[] animation = playerAnimations.get(index);
@@ -95,25 +95,21 @@ public class Player extends Entity{
             if(keyHandler.isUpPressed()){
                 if(!gameObjectHandler.isColliding(getWorldX(), getWorldY()-getSpeed(), GamePanel.SCALED_PLAYER_SIZE, GamePanel.SCALED_PLAYER_SIZE)){
                     setWorldY(getWorldY()-getSpeed());
-                    gamePanel.updatePlayerPosition();
                 }
                 setDirection("up");
             } else if(keyHandler.isDownPressed()){
                 if(!gameObjectHandler.isColliding(getWorldX(), getWorldY()+getSpeed(), GamePanel.SCALED_PLAYER_SIZE, GamePanel.SCALED_PLAYER_SIZE)){
                     setWorldY(getWorldY()+getSpeed());
-                    gamePanel.updatePlayerPosition();
                 }
                 setDirection("down");
             } else if(keyHandler.isLeftPressed()){
                 if(!gameObjectHandler.isColliding(getWorldX()-getSpeed(), getWorldY(), GamePanel.SCALED_PLAYER_SIZE, GamePanel.SCALED_PLAYER_SIZE)){
                     setWorldX(getWorldX()-getSpeed());
-                    gamePanel.updatePlayerPosition();
                 }
                 setDirection("left");
             } else {
                 if(!gameObjectHandler.isColliding(getWorldX()+getSpeed(), getWorldY(), GamePanel.SCALED_PLAYER_SIZE, GamePanel.SCALED_PLAYER_SIZE)){
                     setWorldX(getWorldX()+getSpeed());
-                    gamePanel.updatePlayerPosition();
                 }
                 setDirection("right");
             }

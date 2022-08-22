@@ -1,8 +1,5 @@
 package main;
 
-import database.control.DatabaseController;
-import database.model.PlayerModel;
-import database.model.PositionModel;
 import entity.Player;
 import game_object.GameObject;
 import game_object.GameObjectHandler;
@@ -17,20 +14,23 @@ import javax.swing.JPanel;
 public class GamePanel extends JPanel implements Runnable{
 
     //SCREEN SETTINGS
-    public static final int PLAYER_SIZE = 16;
+    public static final int ORIGINAL_PLAYER_SIZE = 16;
     public static final int ORIGINAL_TILE_SIZE = 16;
     public static final int SCALE = 3;
 
-    public static final int SCALED_PLAYER_SIZE = PLAYER_SIZE * SCALE;
+    public static final int SCALED_PLAYER_SIZE = ORIGINAL_PLAYER_SIZE * SCALE;
     public static final int TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE;
-    public static final int MAX_SCREEN_COL = 32; //32
-    public static final int MAX_SCREEN_ROW = 18; //18
+    public static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
+    public static final int SCALE_WIDTH = 2;
+    public static final double SCALE_HEIGHT = 1.5;
+    public static final int MAX_SCREEN_COL = (int)((SCREEN_SIZE.getWidth()/SCALE_WIDTH) / TILE_SIZE); //32
+    public static final int MAX_SCREEN_ROW = (int)((SCREEN_SIZE.getHeight()/SCALE_HEIGHT) / TILE_SIZE); //18
+
     public static final int SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_COL;
     public static final int SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
 
-    public static final int EMPTY_TILE = -1;
-    public static String USERNAME = "Dared5";
-    public static String PASSWORD = "4565";
+//    public static final int EMPTY_TILE = -1;
+    public static final int EMPTY_TILE = 0;
 
 
     //FPS
@@ -42,11 +42,8 @@ public class GamePanel extends JPanel implements Runnable{
     private GameObjectHandler gameObjectHandler = new GameObjectHandler(this);
     private GameObjectRenderer gameObjectRenderer = new GameObjectRenderer(this);
     private Player player = new Player(this, keyHandler);
-    private PlayerModel playerModel;
-    private PositionModel positionModel;
     private TileRenderer tileRenderer = new TileRenderer(this);
     private UI ui = new UI(this);
-//    private DatabaseController databaseController = new DatabaseController();
 
     private double drawStart = 0.0;
     private double drawEnd = 0.0;
@@ -62,11 +59,6 @@ public class GamePanel extends JPanel implements Runnable{
         this.addMouseListener(mouseHandler);
         this.addMouseMotionListener(mouseHandler);
         this.setFocusable(true);
-
-//        playerModel = databaseController.login(USERNAME, PASSWORD);
-//        positionModel = databaseController.getCurrentPosition(playerModel);
-//        player.setWorldX(positionModel.getxPos());
-//        player.setWorldY(positionModel.getyPos());
     }
 
     public void startGameThread(){
@@ -130,15 +122,6 @@ public class GamePanel extends JPanel implements Runnable{
         if(gameState.equals(GameState.PLAYING) || gameState.equals(GameState.PAUSED)){
             tileRenderer.draw(g2);
             gameObjectRenderer.draw(g2);
-//            for(GameObject curObject : gameObjectHandler.getGameObjects()){
-//                if(curObject.getPostion().getY() < player.getWorldY()){
-//                    curObject.draw(g2);
-//                    player.draw(g2);
-//                } else{
-//                    player.draw(g2);
-//                    curObject.draw(g2);
-//                }
-//            }
         }
         ui.draw(g2);
         //END DRAW
@@ -150,11 +133,6 @@ public class GamePanel extends JPanel implements Runnable{
         g2.dispose();
     }
 
-    public void updatePlayerPosition(){
-//        positionModel.setxPos(player.getWorldX());
-//        positionModel.setyPos(player.getWorldY());
-//        databaseController.updatePosition(positionModel);
-    }
 
     public Player getPlayer(){
         return this.player;

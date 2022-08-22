@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,10 +25,20 @@ public class TileRenderer {
     public TileRenderer(GamePanel gp){
         this.player = gp.getPlayer();
 
-        availableTiles = generateMapOfTiles();
+        Map<Integer, Tile> tileset = new HashMap<>();
+        try {
+            BufferedImage curTileset = ImageIO.read(new FileInputStream("resources/tiles/tileSpritesheet.png"));
+            tileset = generateTileset(curTileset, 16);
+        } catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+        String[] filePaths = new String[]{"resources/maps/Tiled_Map.txt", "resources/maps/Tiled_Map01.txt"};
+        worldLayers = generateWorldLayers(filePaths, tileset);
 
-        String[] filePaths = new String[]{"resources/maps/test_map.txt"};
-        worldLayers = generateWorldLayers(filePaths, availableTiles);
+//        availableTiles = generateMapOfTiles();
+//
+//        String[] filePaths = new String[]{"resources/maps/test_map.txt"};
+//        worldLayers = generateWorldLayers(filePaths, availableTiles);
     }
 
     private WorldLayers generateWorldLayers(String[] filePaths, Map<Integer, Tile> availableTiles){
@@ -36,6 +47,32 @@ public class TileRenderer {
             worldLayers.addLayer(curFilePath, availableTiles);
         }
         return worldLayers;
+    }
+
+    private Map<Integer, Tile> generateTileset(BufferedImage tileset, int tileSize){
+        Map<Integer, Tile> generatedTileset = new HashMap<>();
+        int imageWidth = 0;
+        int imageHeight = 0;
+        try {
+            imageWidth = tileset.getWidth();
+            imageHeight = tileset.getHeight();
+        } catch (RuntimeException e){
+            System.out.println(e.getMessage());
+        }
+        BufferedImage curTileImage;
+        BufferedImage scaledImage;
+        int index = 1;
+        for(int y = 0; y * tileSize < imageHeight; y++){
+            for(int x = 0; x * tileSize < imageWidth; x++){
+                curTileImage = tileset.getSubimage(x*tileSize, y*tileSize, tileSize, tileSize);
+                scaledImage = UtilityTool.scaleImage(curTileImage, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
+                Tile tempTile = new Tile(scaledImage, false);
+                generatedTileset.put(index, tempTile);
+                index++;
+            }
+        }
+
+    return generatedTileset;
     }
 
     private Map<Integer, Tile> generateMapOfTiles(){
