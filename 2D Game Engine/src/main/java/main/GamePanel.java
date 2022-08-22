@@ -1,9 +1,6 @@
 package main;
 
 import entity.Player;
-import game_object.GameObject;
-import game_object.GameObjectHandler;
-import game_object.GameObjectRenderer;
 import map.TileRenderer;
 import ui.UI;
 
@@ -29,6 +26,9 @@ public class GamePanel extends JPanel implements Runnable{
     public static final int SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_COL;
     public static final int SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
 
+    public static int MAP_WIDTH = 0;
+    public static int MAP_HEIGHT = 0;
+
 //    public static final int EMPTY_TILE = -1;
     public static final int EMPTY_TILE = 0;
 
@@ -39,9 +39,8 @@ public class GamePanel extends JPanel implements Runnable{
     private KeyHandler keyHandler = new KeyHandler();
     private MouseHandler mouseHandler = new MouseHandler();
     private Thread gameThread;
-    private GameObjectHandler gameObjectHandler = new GameObjectHandler(this);
-    private GameObjectRenderer gameObjectRenderer = new GameObjectRenderer(this);
     private Player player = new Player(this, keyHandler);
+    private Camera mainCamera = new Camera(0, 0, player);
     private TileRenderer tileRenderer = new TileRenderer(this);
     private UI ui = new UI(this);
 
@@ -106,6 +105,7 @@ public class GamePanel extends JPanel implements Runnable{
     public void update(){
         if(gameState == GameState.PLAYING){
             player.update();
+            mainCamera.update();
         }
     }
 
@@ -121,7 +121,7 @@ public class GamePanel extends JPanel implements Runnable{
         //DRAW
         if(gameState.equals(GameState.PLAYING) || gameState.equals(GameState.PAUSED)){
             tileRenderer.draw(g2);
-            gameObjectRenderer.draw(g2);
+            player.draw(g2);
         }
         ui.draw(g2);
         //END DRAW
@@ -142,12 +142,12 @@ public class GamePanel extends JPanel implements Runnable{
         return tileRenderer;
     }
 
-    public GameObjectHandler getGameObjectHandler() {
-        return gameObjectHandler;
-    }
 
     public MouseHandler getMouseHandler() {
         return mouseHandler;
     }
 
+    public Camera getMainCamera() {
+        return mainCamera;
+    }
 }

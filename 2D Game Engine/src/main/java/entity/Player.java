@@ -1,6 +1,5 @@
 package entity;
 
-import game_object.GameObjectHandler;
 import main.*;
 
 import javax.imageio.ImageIO;
@@ -16,8 +15,6 @@ public class Player extends Entity{
 
     private GamePanel gamePanel;
     private KeyHandler keyHandler;
-    private GameObjectHandler gameObjectHandler;
-
     private int screenX;
     private int screenY;
 
@@ -34,7 +31,6 @@ public class Player extends Entity{
     public Player(GamePanel gamePanel, KeyHandler keyHandler){
         this.gamePanel = gamePanel;
         this.keyHandler = keyHandler;
-        this.gameObjectHandler = gamePanel.getGameObjectHandler();
 
         screenX = GamePanel.SCREEN_WIDTH / 2 - (GamePanel.TILE_SIZE /2);
         screenY = GamePanel.SCREEN_HEIGHT / 2 - (GamePanel.TILE_SIZE /2);
@@ -93,23 +89,49 @@ public class Player extends Entity{
     public void update(){
         if(keyHandler.isDownPressed() || keyHandler.isLeftPressed() || keyHandler.isRightPressed() || keyHandler.isUpPressed()){
             if(keyHandler.isUpPressed()){
-                if(!gameObjectHandler.isColliding(getWorldX(), getWorldY()-getSpeed(), GamePanel.SCALED_PLAYER_SIZE, GamePanel.SCALED_PLAYER_SIZE)){
-                    setWorldY(getWorldY()-getSpeed());
+                if(screenY > GamePanel.SCREEN_HEIGHT/2){
+                    screenY -= getSpeed();
+                } else{
+                    if(getWorldY() < 0){
+                        screenY -= getSpeed();
+                    }else {
+                        setWorldY(getWorldY()-getSpeed());
+                    }
                 }
                 setDirection("up");
             } else if(keyHandler.isDownPressed()){
-                if(!gameObjectHandler.isColliding(getWorldX(), getWorldY()+getSpeed(), GamePanel.SCALED_PLAYER_SIZE, GamePanel.SCALED_PLAYER_SIZE)){
-                    setWorldY(getWorldY()+getSpeed());
+                if(screenY < GamePanel.SCREEN_HEIGHT/2){
+                    screenY += getSpeed();
+                } else{
+                    if(getWorldY()+screenY*2 > GamePanel.MAP_HEIGHT){
+                        screenY += getSpeed();
+                    }else {
+                        setWorldY(getWorldY()+getSpeed());
+                    }
                 }
                 setDirection("down");
             } else if(keyHandler.isLeftPressed()){
-                if(!gameObjectHandler.isColliding(getWorldX()-getSpeed(), getWorldY(), GamePanel.SCALED_PLAYER_SIZE, GamePanel.SCALED_PLAYER_SIZE)){
-                    setWorldX(getWorldX()-getSpeed());
+
+                if(screenX > GamePanel.SCREEN_WIDTH/2){
+                    screenX -= getSpeed();
+                } else {
+                    if(getWorldX() <= 0){
+                        screenX -= getSpeed();
+                    } else{
+                        setWorldX(getWorldX()-getSpeed());
+                    }
+
                 }
                 setDirection("left");
             } else {
-                if(!gameObjectHandler.isColliding(getWorldX()+getSpeed(), getWorldY(), GamePanel.SCALED_PLAYER_SIZE, GamePanel.SCALED_PLAYER_SIZE)){
-                    setWorldX(getWorldX()+getSpeed());
+                if(screenX < GamePanel.SCREEN_WIDTH/2){
+                    screenX += getSpeed();
+                } else {
+                    if(getWorldX()+screenX*2 > GamePanel.MAP_WIDTH){
+                        screenX += getSpeed();
+                    }else {
+                        setWorldX(getWorldX()+getSpeed());
+                    }
                 }
                 setDirection("right");
             }
