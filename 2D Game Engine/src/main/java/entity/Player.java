@@ -47,8 +47,8 @@ public class Player extends Entity{
 
 
     public void setDefaultValues(){
-        setWorldX(GamePanel.SCREEN_WIDTH/2);
-        setWorldY(GamePanel.SCREEN_HEIGHT/2);
+        setWorldX(500);
+        setWorldY(500);
         setSpeed(4);
         setDirection("down");
         setBounds(new Rectangle(getWorldX(), getWorldY(), GamePanel.TILE_SIZE, GamePanel.TILE_SIZE));
@@ -104,7 +104,13 @@ public class Player extends Entity{
 //                    }
 //                }
                 if(!collisionHandler.isColliding(getWorldX(), getWorldY()-getSpeed())){
-                        setWorldY(getWorldY()-getSpeed());
+                    setWorldY(getWorldY()-getSpeed());
+                    if(getWorldY()-GamePanel.SCREEN_HEIGHT/2 < 0){
+                        screenY -= getSpeed();
+                    }
+                    if(getWorldY()+GamePanel.SCREEN_HEIGHT/2 > GamePanel.MAP_HEIGHT){
+                        screenY -= getSpeed();
+                    }
                 }
                 setDirection("up");
             } else if(keyHandler.isDownPressed()){
@@ -118,7 +124,13 @@ public class Player extends Entity{
 //                    }
 //                }
                 if(!collisionHandler.isColliding(getWorldX(), getWorldY()+getSpeed())){
-                        setWorldY(getWorldY()+getSpeed());
+                    setWorldY(getWorldY()+getSpeed());
+                    if(getWorldY()+GamePanel.SCREEN_HEIGHT/2 > GamePanel.MAP_HEIGHT){
+                        screenY += getSpeed();
+                    }
+                    if(getWorldY()-GamePanel.SCREEN_HEIGHT/2 < 0){
+                        screenY += getSpeed();
+                    }
                 }
                 setDirection("down");
             } else if(keyHandler.isLeftPressed()){
@@ -134,8 +146,14 @@ public class Player extends Entity{
 //
 //                }
                 if(!collisionHandler.isColliding(getWorldX()-getSpeed(), getWorldY())){
-                        setWorldX(getWorldX()-getSpeed());
+                    setWorldX(getWorldX()-getSpeed());
+                    if(getWorldX()+GamePanel.SCREEN_WIDTH/2 > GamePanel.MAP_WIDTH){
+                        screenX -= getSpeed();
                     }
+                    if(getWorldX()-GamePanel.SCREEN_WIDTH/2 < 0){
+                        screenX -= getSpeed();
+                    }
+                }
                 setDirection("left");
             } else {
 //                if(screenX < GamePanel.SCREEN_WIDTH/2){
@@ -151,6 +169,12 @@ public class Player extends Entity{
 //                }
                 if(!collisionHandler.isColliding(getWorldX()+getSpeed(), getWorldY())) {
                     setWorldX(getWorldX() + getSpeed());
+                    if(getWorldX()-GamePanel.SCREEN_WIDTH/2 < 0){
+                        screenX += getSpeed();
+                    }
+                    if(getWorldX()+GamePanel.SCREEN_WIDTH/2 > GamePanel.MAP_WIDTH){
+                        screenX += getSpeed();
+                    }
                 }
                 setDirection("right");
             }

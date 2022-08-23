@@ -22,6 +22,7 @@ public class CollisionHandler {
         testRect = new Rectangle(100,100, GamePanel.TILE_SIZE, 1000);
 //        generateCollidableTiles();
         generateCollisionBoxes();
+        generateWorldBorders();
     }
     public boolean isColliding(int x, int y){
         if(collisionBoxes != null){
@@ -50,6 +51,13 @@ public class CollisionHandler {
         }
 
         this.collisionBoxes = collisionBoxes;
+    }
+
+    public void generateWorldBorders(){
+        collisionBoxes.add(new Rectangle(GamePanel.MAP_WIDTH-GamePanel.TILE_SIZE/2, 0, GamePanel.TILE_SIZE, GamePanel.MAP_HEIGHT));
+        collisionBoxes.add(new Rectangle(-GamePanel.TILE_SIZE / 2, 0, GamePanel.TILE_SIZE, GamePanel.MAP_HEIGHT));
+        collisionBoxes.add(new Rectangle(0, -GamePanel.TILE_SIZE / 2, GamePanel.MAP_WIDTH, GamePanel.TILE_SIZE));
+        collisionBoxes.add(new Rectangle(0, GamePanel.MAP_HEIGHT-GamePanel.TILE_SIZE / 2, GamePanel.MAP_WIDTH, GamePanel.TILE_SIZE));
     }
 
     public boolean hasCollidedWithTile(int newWorldX, int newWorldY){
