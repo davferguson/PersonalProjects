@@ -27,6 +27,7 @@ public class Player extends Entity{
     private BufferedImage[] leftAnimation = new BufferedImage[animationFrames];
     private BufferedImage[] rightAnimation = new BufferedImage[animationFrames];
     private List<BufferedImage[]> playerAnimations = new ArrayList<>();
+    private CollisionHandler collisionHandler;
 
     public Player(GamePanel gamePanel, KeyHandler keyHandler){
         this.gamePanel = gamePanel;
@@ -50,6 +51,7 @@ public class Player extends Entity{
         setWorldY(GamePanel.SCREEN_HEIGHT/2);
         setSpeed(4);
         setDirection("down");
+        setBounds(new Rectangle(getWorldX(), getWorldY(), GamePanel.TILE_SIZE, GamePanel.TILE_SIZE));
     }
 
     public void getPlayerImage(){
@@ -87,54 +89,72 @@ public class Player extends Entity{
     }
 
     public void update(){
+        if(collisionHandler == null){
+            collisionHandler = gamePanel.getCollisionHandler();
+        }
         if(keyHandler.isDownPressed() || keyHandler.isLeftPressed() || keyHandler.isRightPressed() || keyHandler.isUpPressed()){
             if(keyHandler.isUpPressed()){
-                if(screenY > GamePanel.SCREEN_HEIGHT/2){
-                    screenY -= getSpeed();
-                } else{
-                    if(getWorldY() < 0){
-                        screenY -= getSpeed();
-                    }else {
+//                if(screenY > GamePanel.SCREEN_HEIGHT/2){
+//                    screenY -= getSpeed();
+//                } else{
+//                    if(getWorldY() < 0){
+//                        screenY -= getSpeed();
+//                    }else if(!collisionHandler.isColliding(getWorldX(), getWorldY()-getSpeed())){
+//                        setWorldY(getWorldY()-getSpeed());
+//                    }
+//                }
+                if(!collisionHandler.isColliding(getWorldX(), getWorldY()-getSpeed())){
                         setWorldY(getWorldY()-getSpeed());
-                    }
                 }
                 setDirection("up");
             } else if(keyHandler.isDownPressed()){
-                if(screenY < GamePanel.SCREEN_HEIGHT/2){
-                    screenY += getSpeed();
-                } else{
-                    if(getWorldY()+screenY*2 > GamePanel.MAP_HEIGHT){
-                        screenY += getSpeed();
-                    }else {
+//                if(screenY < GamePanel.SCREEN_HEIGHT/2){
+//                    screenY += getSpeed();
+//                } else{
+//                    if(getWorldY()+screenY*2 > GamePanel.MAP_HEIGHT){
+//                        screenY += getSpeed();
+//                    }else if(!collisionHandler.isColliding(getWorldX(), getWorldY()+getSpeed())){
+//                        setWorldY(getWorldY()+getSpeed());
+//                    }
+//                }
+                if(!collisionHandler.isColliding(getWorldX(), getWorldY()+getSpeed())){
                         setWorldY(getWorldY()+getSpeed());
-                    }
                 }
                 setDirection("down");
             } else if(keyHandler.isLeftPressed()){
 
-                if(screenX > GamePanel.SCREEN_WIDTH/2){
-                    screenX -= getSpeed();
-                } else {
-                    if(getWorldX() <= 0){
-                        screenX -= getSpeed();
-                    } else{
+//                if(screenX > GamePanel.SCREEN_WIDTH/2){
+//                    screenX -= getSpeed();
+//                } else {
+//                    if(getWorldX() <= 0){
+//                        screenX -= getSpeed();
+//                    } else if(!collisionHandler.isColliding(getWorldX()-getSpeed(), getWorldY())){
+//                        setWorldX(getWorldX()-getSpeed());
+//                    }
+//
+//                }
+                if(!collisionHandler.isColliding(getWorldX()-getSpeed(), getWorldY())){
                         setWorldX(getWorldX()-getSpeed());
                     }
-
-                }
                 setDirection("left");
             } else {
-                if(screenX < GamePanel.SCREEN_WIDTH/2){
-                    screenX += getSpeed();
-                } else {
-                    if(getWorldX()+screenX*2 > GamePanel.MAP_WIDTH){
-                        screenX += getSpeed();
-                    }else {
-                        setWorldX(getWorldX()+getSpeed());
-                    }
+//                if(screenX < GamePanel.SCREEN_WIDTH/2){
+//                    screenX += getSpeed();
+//                } else {
+//                    if(getWorldX()+screenX*2 > GamePanel.MAP_WIDTH){
+//                        screenX += getSpeed();
+//                    }else if(!collisionHandler.isColliding(getWorldX()+getSpeed(), getWorldY())){
+//                        setWorldX(getWorldX()+getSpeed());
+//                    }else {
+//                        System.out.println("Colliding");
+//                    }
+//                }
+                if(!collisionHandler.isColliding(getWorldX()+getSpeed(), getWorldY())) {
+                    setWorldX(getWorldX() + getSpeed());
                 }
                 setDirection("right");
             }
+            setBounds(new Rectangle(getWorldX(), getWorldY(), GamePanel.TILE_SIZE, GamePanel.TILE_SIZE));
 
             spriteCounter++;
             if(spriteCounter > animationSpeed){
@@ -167,6 +187,8 @@ public class Player extends Entity{
                 break;
         }
         g2.drawImage(image, screenX, screenY, null);
+        g2.drawString("world x-pos: " + getWorldX(), 10, 10);
+        g2.drawString("world y-pos: " + getWorldY(), 10, 20);
 
     }
     public void drawDebug(Graphics2D g2){

@@ -1,11 +1,13 @@
 package entity;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Entity {
     private int worldX, worldY;
     private int speed;
 
+    private Rectangle bounds;
     private BufferedImage spriteSheet;
     private String direction;
 
@@ -47,5 +49,13 @@ public class Entity {
 
     public void setDirection(String direction) {
         this.direction = direction;
+    }
+
+    public Rectangle getBounds() {
+        return bounds;
+    }
+
+    public void setBounds(Rectangle bounds) {
+        this.bounds = bounds;
     }
 }

@@ -20,8 +20,8 @@ public class GamePanel extends JPanel implements Runnable{
     public static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
     public static final int SCALE_WIDTH = 2;
     public static final double SCALE_HEIGHT = 1.5;
-    public static final int MAX_SCREEN_COL = (int)((SCREEN_SIZE.getWidth()/SCALE_WIDTH) / TILE_SIZE); //32
-    public static final int MAX_SCREEN_ROW = (int)((SCREEN_SIZE.getHeight()/SCALE_HEIGHT) / TILE_SIZE); //18
+    public static final int MAX_SCREEN_COL = 16; //32
+    public static final int MAX_SCREEN_ROW = 14; //18
 
     public static final int SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_COL;
     public static final int SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
@@ -42,6 +42,7 @@ public class GamePanel extends JPanel implements Runnable{
     private Player player = new Player(this, keyHandler);
     private Camera mainCamera = new Camera(0, 0, player);
     private TileRenderer tileRenderer = new TileRenderer(this);
+    private CollisionHandler collisionHandler = new CollisionHandler(this);
     private UI ui = new UI(this);
 
     private double drawStart = 0.0;
@@ -142,6 +143,9 @@ public class GamePanel extends JPanel implements Runnable{
         return tileRenderer;
     }
 
+    public CollisionHandler getCollisionHandler() {
+        return collisionHandler;
+    }
 
     public MouseHandler getMouseHandler() {
         return mouseHandler;

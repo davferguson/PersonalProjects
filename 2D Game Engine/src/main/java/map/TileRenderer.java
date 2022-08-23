@@ -119,48 +119,10 @@ public class TileRenderer {
     return generatedTileset;
     }
 
-    private Map<Integer, Tile> generateMapOfTiles(){
-        Map<Integer, Tile> tiles = new HashMap<>();
-        BufferedImage curTileImage;
-        BufferedImage scaledImage;
-        Tile tempTile;
-
-        try{
-            //GRASS01
-            curTileImage = ImageIO.read(new FileInputStream("resources/tiles/Grass01_Tile.png"));
-            scaledImage = UtilityTool.scaleImage(curTileImage, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
-            tempTile = new Tile(scaledImage, false);
-            tiles.put(1, tempTile);
-            //END GRASS01
-
-            //GRASS02
-            curTileImage = ImageIO.read(new FileInputStream("resources/tiles/Grass02_Tile.png"));
-            scaledImage = UtilityTool.scaleImage(curTileImage, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
-            tempTile = new Tile(scaledImage, false);
-            tiles.put(2, tempTile);
-            //END GRASS02
-
-            //GRASS_FLOWER
-            curTileImage = ImageIO.read(new FileInputStream("resources/tiles/GrassFlower_Tile.png"));
-            scaledImage = UtilityTool.scaleImage(curTileImage, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
-            tempTile = new Tile(scaledImage, false);
-            tiles.put(3, tempTile);
-            //END GRASS_FLOWER
-
-            //GRASS_WEED
-            curTileImage = ImageIO.read(new FileInputStream("resources/tiles/GrassWeed_Tile.png"));
-            scaledImage = UtilityTool.scaleImage(curTileImage, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
-            tempTile = new Tile(scaledImage, false);
-            tiles.put(4, tempTile);
-            //END GRASS_WEED
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-        return tiles;
-    }
-
     public void draw(Graphics2D g2){
-        g2.drawImage(mapImage, -mainCamera.getWorldX(), -mainCamera.getWorldY(), null);
+        int curTileScreenXPos = -mainCamera.getWorldX() + GamePanel.SCREEN_WIDTH/2;
+        int curTileScreenYPos = -mainCamera.getWorldY() + GamePanel.SCREEN_HEIGHT/2;
+        g2.drawImage(mapImage, curTileScreenXPos, curTileScreenYPos, null);
     }
 
 //    public void draw(Graphics2D g2){
@@ -188,7 +150,7 @@ public class TileRenderer {
 //    }
 
 
-    public WorldLayers getTileMap() {
+    public WorldLayers getWorldLayers() {
         return worldLayers;
     }
 

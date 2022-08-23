@@ -1,9 +1,11 @@
 package main;
 
+import entity.Entity;
 import map.Layer;
 import map.WorldLayers;
 import tile.Tile;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,14 +14,46 @@ public class CollisionHandler {
     private List<Integer> collidableTiles = new ArrayList<>();
     private int[] colideTileIndex = new int[]{35, 45, 17, 18, 19, 27, 28, 29, 37, 38, 39, 47, 48, 49, 24, 26, 25};
 
+    private Rectangle testRect;
+    private List<Rectangle> collisionBoxes;
+
     public CollisionHandler(GamePanel gp){
         this.gp = gp;
-        generateCollidableTiles();
+        testRect = new Rectangle(100,100, GamePanel.TILE_SIZE, 1000);
+//        generateCollidableTiles();
+        generateCollisionBoxes();
+    }
+    public boolean isColliding(int x, int y){
+        if(collisionBoxes != null){
+            for(int i = 0; i < collisionBoxes.size(); i++){
+                if(collisionBoxes.get(i).contains(x, y)){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
+    public void generateCollisionBoxes(){
+        List<Rectangle> collisionBoxes = new ArrayList<>();
+
+        WorldLayers worldLayers = gp.getTileRenderer().getWorldLayers();
+        Layer collisionLayer = worldLayers.getLayers().get(1);
+        Tile[][] tileMatrix = collisionLayer.getTileMatrix();
+
+        for(int y = 0; y < collisionLayer.getMaxWorldRow(); y++){
+            for(int x = 0; x < collisionLayer.getMaxWorldCol(); x++){
+                if(tileMatrix[y][x] != null){
+                    collisionBoxes.add(new Rectangle((x*GamePanel.TILE_SIZE), (y*GamePanel.TILE_SIZE), GamePanel.TILE_SIZE, GamePanel.TILE_SIZE));
+                }
+            }
+        }
+
+        this.collisionBoxes = collisionBoxes;
+    }
 
     public boolean hasCollidedWithTile(int newWorldX, int newWorldY){
-        WorldLayers worldLayers = gp.getTileRenderer().getTileMap();
+        WorldLayers worldLayers = gp.getTileRenderer().getWorldLayers();
         boolean isColliding = false;
         for(Layer curLayer : worldLayers.getLayers()){
             Tile[][] curTileMatrix;
