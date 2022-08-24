@@ -17,6 +17,7 @@ public class Player extends Entity{
     private KeyHandler keyHandler;
     private int screenX;
     private int screenY;
+    private int screenMiddleX, screenMiddleY;
 
     private int spriteIndex = 0;
     private int spriteCounter = 0;
@@ -33,8 +34,10 @@ public class Player extends Entity{
         this.gamePanel = gamePanel;
         this.keyHandler = keyHandler;
 
-        screenX = GamePanel.SCREEN_WIDTH / 2 - (GamePanel.TILE_SIZE /2);
-        screenY = GamePanel.SCREEN_HEIGHT / 2 - (GamePanel.TILE_SIZE /2);
+        screenMiddleX = GamePanel.SCREEN_WIDTH / 2 - (GamePanel.TILE_SIZE /2);
+        screenMiddleY = GamePanel.SCREEN_HEIGHT / 2 - (GamePanel.TILE_SIZE /2);
+        screenX = screenMiddleX;
+        screenY = screenMiddleY;
 
         playerAnimations.add(upAnimation);
         playerAnimations.add(downAnimation);
@@ -94,87 +97,56 @@ public class Player extends Entity{
         }
         if(keyHandler.isDownPressed() || keyHandler.isLeftPressed() || keyHandler.isRightPressed() || keyHandler.isUpPressed()){
             if(keyHandler.isUpPressed()){
-//                if(screenY > GamePanel.SCREEN_HEIGHT/2){
-//                    screenY -= getSpeed();
-//                } else{
-//                    if(getWorldY() < 0){
-//                        screenY -= getSpeed();
-//                    }else if(!collisionHandler.isColliding(getWorldX(), getWorldY()-getSpeed())){
-//                        setWorldY(getWorldY()-getSpeed());
-//                    }
-//                }
+
                 if(!collisionHandler.isColliding(getWorldX(), getWorldY()-getSpeed())){
                     setWorldY(getWorldY()-getSpeed());
                     if(getWorldY()-GamePanel.SCREEN_HEIGHT/2 < 0){
                         screenY -= getSpeed();
                     }
-                    if(getWorldY()+GamePanel.SCREEN_HEIGHT/2 > GamePanel.MAP_HEIGHT){
+                    if(screenY > screenMiddleY){
                         screenY -= getSpeed();
                     }
                 }
                 setDirection("up");
             } else if(keyHandler.isDownPressed()){
-//                if(screenY < GamePanel.SCREEN_HEIGHT/2){
-//                    screenY += getSpeed();
-//                } else{
-//                    if(getWorldY()+screenY*2 > GamePanel.MAP_HEIGHT){
-//                        screenY += getSpeed();
-//                    }else if(!collisionHandler.isColliding(getWorldX(), getWorldY()+getSpeed())){
-//                        setWorldY(getWorldY()+getSpeed());
-//                    }
-//                }
+
                 if(!collisionHandler.isColliding(getWorldX(), getWorldY()+getSpeed())){
                     setWorldY(getWorldY()+getSpeed());
                     if(getWorldY()+GamePanel.SCREEN_HEIGHT/2 > GamePanel.MAP_HEIGHT){
                         screenY += getSpeed();
                     }
-                    if(getWorldY()-GamePanel.SCREEN_HEIGHT/2 < 0){
+                    if(screenY < screenMiddleY){
                         screenY += getSpeed();
                     }
                 }
                 setDirection("down");
             } else if(keyHandler.isLeftPressed()){
 
-//                if(screenX > GamePanel.SCREEN_WIDTH/2){
-//                    screenX -= getSpeed();
-//                } else {
-//                    if(getWorldX() <= 0){
-//                        screenX -= getSpeed();
-//                    } else if(!collisionHandler.isColliding(getWorldX()-getSpeed(), getWorldY())){
-//                        setWorldX(getWorldX()-getSpeed());
-//                    }
-//
-//                }
                 if(!collisionHandler.isColliding(getWorldX()-getSpeed(), getWorldY())){
                     setWorldX(getWorldX()-getSpeed());
-                    if(getWorldX()+GamePanel.SCREEN_WIDTH/2 > GamePanel.MAP_WIDTH){
-                        screenX -= getSpeed();
-                    }
                     if(getWorldX()-GamePanel.SCREEN_WIDTH/2 < 0){
                         screenX -= getSpeed();
                     }
+                    if(screenX > screenMiddleX){
+                        screenX -= getSpeed();
+                    }
+//                    if(getWorldX()-GamePanel.SCREEN_WIDTH/2 < 0){
+//                        screenX -= getSpeed();
+//                    }
                 }
                 setDirection("left");
             } else {
-//                if(screenX < GamePanel.SCREEN_WIDTH/2){
-//                    screenX += getSpeed();
-//                } else {
-//                    if(getWorldX()+screenX*2 > GamePanel.MAP_WIDTH){
-//                        screenX += getSpeed();
-//                    }else if(!collisionHandler.isColliding(getWorldX()+getSpeed(), getWorldY())){
-//                        setWorldX(getWorldX()+getSpeed());
-//                    }else {
-//                        System.out.println("Colliding");
-//                    }
-//                }
                 if(!collisionHandler.isColliding(getWorldX()+getSpeed(), getWorldY())) {
                     setWorldX(getWorldX() + getSpeed());
-                    if(getWorldX()-GamePanel.SCREEN_WIDTH/2 < 0){
-                        screenX += getSpeed();
-                    }
                     if(getWorldX()+GamePanel.SCREEN_WIDTH/2 > GamePanel.MAP_WIDTH){
                         screenX += getSpeed();
                     }
+                    if(screenX < screenMiddleX){
+                        screenX += getSpeed();
+                    }
+//                    if(getWorldX()+GamePanel.SCREEN_WIDTH/2 > GamePanel.MAP_WIDTH){
+//                        screenX += getSpeed();
+//                    }
                 }
                 setDirection("right");
             }
@@ -213,6 +185,8 @@ public class Player extends Entity{
         g2.drawImage(image, screenX, screenY, null);
         g2.drawString("world x-pos: " + getWorldX(), 10, 10);
         g2.drawString("world y-pos: " + getWorldY(), 10, 20);
+        g2.drawString("screen x-pos: " + screenX, 10, 30);
+        g2.drawString("screen y-pos: " + screenY, 10, 40);
 
     }
     public void drawDebug(Graphics2D g2){
