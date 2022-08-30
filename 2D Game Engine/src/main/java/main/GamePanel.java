@@ -1,6 +1,7 @@
 package main;
 
 import entity.Player;
+import game_object.GameObjectManager;
 import map.TileRenderer;
 import ui.UI;
 
@@ -43,6 +44,7 @@ public class GamePanel extends JPanel implements Runnable{
     private Camera mainCamera = new Camera(0, 0, player);
     private TileRenderer tileRenderer = new TileRenderer(this);
     private CollisionHandler collisionHandler = new CollisionHandler(this);
+    private GameObjectManager gameObjectManager = new GameObjectManager(this);
     private UI ui = new UI(this);
 
     private double drawStart = 0.0;
@@ -123,6 +125,7 @@ public class GamePanel extends JPanel implements Runnable{
         if(gameState.equals(GameState.PLAYING) || gameState.equals(GameState.PAUSED)){
             tileRenderer.draw(g2);
             player.draw(g2);
+            gameObjectManager.draw(g2);
         }
         ui.draw(g2);
         //END DRAW

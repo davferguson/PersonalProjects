@@ -120,9 +120,9 @@ public class TileRenderer {
     }
 
     public void draw(Graphics2D g2){
-        int curTileScreenXPos = -mainCamera.getWorldX() + GamePanel.SCREEN_WIDTH/2;
-        int curTileScreenYPos = -mainCamera.getWorldY() + GamePanel.SCREEN_HEIGHT/2;
-        g2.drawImage(mapImage, curTileScreenXPos, curTileScreenYPos, null);
+        int curScreenXPos = -mainCamera.getWorldX() + GamePanel.SCREEN_WIDTH/2;
+        int curScreenYPos = -mainCamera.getWorldY() + GamePanel.SCREEN_HEIGHT/2;
+        g2.drawImage(mapImage, curScreenXPos, curScreenYPos, null);
     }
 
 //    public void draw(Graphics2D g2){

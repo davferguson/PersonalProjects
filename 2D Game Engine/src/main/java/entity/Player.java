@@ -130,9 +130,6 @@ public class Player extends Entity{
                     if(screenX > screenMiddleX){
                         screenX -= getSpeed();
                     }
-//                    if(getWorldX()-GamePanel.SCREEN_WIDTH/2 < 0){
-//                        screenX -= getSpeed();
-//                    }
                 }
                 setDirection("left");
             } else {
@@ -144,9 +141,6 @@ public class Player extends Entity{
                     if(screenX < screenMiddleX){
                         screenX += getSpeed();
                     }
-//                    if(getWorldX()+GamePanel.SCREEN_WIDTH/2 > GamePanel.MAP_WIDTH){
-//                        screenX += getSpeed();
-//                    }
                 }
                 setDirection("right");
             }

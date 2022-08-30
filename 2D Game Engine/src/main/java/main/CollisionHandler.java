@@ -1,6 +1,7 @@
 package main;
 
 import entity.Entity;
+import game_object.GameObject;
 import map.Layer;
 import map.WorldLayers;
 import tile.Tile;
@@ -15,13 +16,13 @@ public class CollisionHandler {
     private int[] colideTileIndex = new int[]{35, 45, 17, 18, 19, 27, 28, 29, 37, 38, 39, 47, 48, 49, 24, 26, 25};
 
     private Rectangle testRect;
-    private List<Rectangle> collisionBoxes;
+    private List<Rectangle> collisionBoxes = new ArrayList<>();
 
     public CollisionHandler(GamePanel gp){
         this.gp = gp;
         testRect = new Rectangle(100,100, GamePanel.TILE_SIZE, 1000);
 //        generateCollidableTiles();
-        generateCollisionBoxes();
+//        generateCollisionBoxes();
         generateWorldBorders();
     }
     public boolean isColliding(int x, int y){
@@ -33,6 +34,12 @@ public class CollisionHandler {
             }
         }
         return false;
+    }
+
+    public void addObjectCollisions(List<GameObject> objects){
+        for(GameObject object : objects){
+            collisionBoxes.add(object.getBounds());
+        }
     }
 
     public void generateCollisionBoxes(){
