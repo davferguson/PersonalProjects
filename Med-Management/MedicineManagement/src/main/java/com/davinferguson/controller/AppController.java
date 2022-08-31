@@ -5,6 +5,7 @@ import com.davinferguson.exception.UserNotFoundException;
 import com.davinferguson.model.RegisterUser;
 import com.davinferguson.model.User;
 import com.davinferguson.service.UserService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class AppController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public void register(@Valid @RequestBody RegisterUser newUser) {
+    public void register(@Valid @RequestBody @NotNull RegisterUser newUser) {
         try{
             User user = userService.findUserByUsername(newUser.getUsername());
             System.out.println("username: " + "\"" + newUser.getUsername() + "\""+ " already exists.");
@@ -29,5 +30,10 @@ public class AppController {
         } catch(UserNotFoundException e){
             userService.createUser(newUser.getUsername(),newUser.getPassword(), newUser.getRole());
         }
+    }
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public String testMessage(){
+        return "do you see this big dawg?";
     }
 }
