@@ -4,6 +4,8 @@ import com.davinferguson.dao.UserDao;
 import com.davinferguson.model.User;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class UserService {
 
@@ -19,5 +21,9 @@ public class UserService {
 
     public User findUserByUsername(String username){
         return userDao.findUserByUsername(username);
+    }
+
+    public List<User> users(){
+        return userDao.allUsers();
     }
 }

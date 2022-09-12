@@ -7,6 +7,8 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Component
@@ -38,6 +40,18 @@ public class JdbcUserDao implements UserDao {
         } else{
             throw new UserNotFoundException();
         }
+    }
+
+    @Override
+    public List<User> allUsers() {
+        String sql = "SELECT * FROM app_user";
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql);
+        List<User> users = new ArrayList<>();
+
+        while(rowSet.next()){
+            users.add(mapRowToUser(rowSet));
+        }
+        return users;
     }
 
     private User mapRowToUser(SqlRowSet rs) {
