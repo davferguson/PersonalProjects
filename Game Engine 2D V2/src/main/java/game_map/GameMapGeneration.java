@@ -1,7 +1,10 @@
 package game_map;
 
 import main.GamePanel;
+import tool.UtilityTool;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
@@ -10,6 +13,30 @@ public class GameMapGeneration {
     private int numTilesInWorldCol;
     private int numTilesInWorldRow;
 
+    public BufferedImage GenerateMapImage(int[][] tileIndexMatrix, String imageFilePath) throws IOException {
+
+
+        BufferedImage tilesetImage = ImageIO.read(new FileInputStream(imageFilePath));
+
+        int imageWidth = numTilesInWorldCol * GamePanel.ORIGINAL_TILE_SIZE;
+        int imageHeight = numTilesInWorldRow * GamePanel.ORIGINAL_TILE_SIZE;
+        BufferedImage mapImage = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = mapImage.createGraphics();
+
+        int tileWidthOfTileset = tilesetImage.getWidth()/GamePanel.ORIGINAL_TILE_SIZE;
+
+        for(int y = 0; y < numTilesInWorldRow; y++){
+            for(int x = 0; x < numTilesInWorldCol; x++){
+                int curTileIndex = tileIndexMatrix[y][x];
+                int tileXPos = curTileIndex % tileWidthOfTileset - 1;
+                int tileYPos = curTileIndex/tileWidthOfTileset;
+                BufferedImage curTileImage = tilesetImage.getSubimage(tileXPos*GamePanel.ORIGINAL_TILE_SIZE, tileYPos*GamePanel.ORIGINAL_TILE_SIZE, GamePanel.ORIGINAL_TILE_SIZE, GamePanel.ORIGINAL_TILE_SIZE);
+                g2d.drawImage(curTileImage, x*GamePanel.ORIGINAL_TILE_SIZE, y*GamePanel.ORIGINAL_TILE_SIZE, null);
+            }
+        }
+        mapImage = UtilityTool.scaleImage(mapImage, mapImage.getWidth()*GamePanel.SCALE, mapImage.getHeight()*GamePanel.SCALE);
+        return mapImage;
+    }
     public int[][] GenerateTileIndexMatrix(String filePath){
         int[][] tileIndexMatrix = null;
         try{

@@ -1,17 +1,20 @@
 package main;
 
 import game_map.GameMapGeneration;
+import game_map.GameMapRenderer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.text.DecimalFormat;
 
 public class GamePanel extends JPanel implements Runnable{
     public static final int ORIGINAL_TILE_SIZE = 16; //TILE SIZE IN PX
     public static final int SCALE = 3; //HOW MUCH TO SCALE UP
-    public static final int NUM_TILES_WIDE = 10;
-    public static final int NUM_TILES_HIGH = 8;
-    public static final String MAP_FILE_TILE_DELIMITER = " ";
+    public static final int NUM_TILES_WIDE = 16;
+    public static final int NUM_TILES_HIGH = 12;
+    public static final String MAP_FILE_TILE_DELIMITER = ",";
 
     public static final int SCREEN_WIDTH = ORIGINAL_TILE_SIZE * SCALE * NUM_TILES_WIDE;
     public static final int SCREEN_HEIGHT = ORIGINAL_TILE_SIZE * SCALE * NUM_TILES_HIGH;
@@ -21,14 +24,29 @@ public class GamePanel extends JPanel implements Runnable{
     private double drawEnd = 0.0;
     private DecimalFormat dfZero = new DecimalFormat("0.00");
     private final int FPS = 60;
+
+    GameMapRenderer gameMapRenderer;
     public GamePanel() {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(Color.GRAY);
         this.setDoubleBuffered(true);
         this.setFocusable(true);
 
+        BufferedImage gameMap = CreateGameMap("src/main/resources/map_data.txt", "src/main/resources/tileset/ashlands_tileset.png");
+        gameMapRenderer = new GameMapRenderer(gameMap);
+    }
+
+    private BufferedImage CreateGameMap(String mapDataFilePath, String tilesetImagePath){
         GameMapGeneration gameMapGeneration = new GameMapGeneration();
-        gameMapGeneration.GenerateTileIndexMatrix("src/main/resources/map_data.txt");
+        int[][] gameMapTileIndexMatrix = gameMapGeneration.GenerateTileIndexMatrix(mapDataFilePath);
+        String imageFilePath = tilesetImagePath;
+        BufferedImage gameMapImage = null;
+        try{
+            gameMapImage = gameMapGeneration.GenerateMapImage(gameMapTileIndexMatrix, imageFilePath);
+        } catch(IOException e){
+            System.out.println("error reading image at path: " + imageFilePath);
+        }
+        return gameMapImage;
     }
 
     public void startGameThread(){
@@ -51,6 +69,7 @@ public class GamePanel extends JPanel implements Runnable{
 
         //DRAW
             //PUT DRAW CODE HERE
+        gameMapRenderer.draw(g2);
         //END DRAW
 
         //DEBUG
