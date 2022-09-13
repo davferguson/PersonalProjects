@@ -1,7 +1,9 @@
 package main;
 
+import camera.CameraManager;
 import game_map.GameMapGeneration;
 import game_map.GameMapRenderer;
+import input.KeyboardInputHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +20,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     public static final int SCREEN_WIDTH = ORIGINAL_TILE_SIZE * SCALE * NUM_TILES_WIDE;
     public static final int SCREEN_HEIGHT = ORIGINAL_TILE_SIZE * SCALE * NUM_TILES_HIGH;
+    public static final int MOVE_SPEED = 3;
 
     private Thread gameThread;
     private double drawStart = 0.0;
@@ -25,12 +28,15 @@ public class GamePanel extends JPanel implements Runnable{
     private DecimalFormat dfZero = new DecimalFormat("0.00");
     private final int FPS = 60;
 
-    GameMapRenderer gameMapRenderer;
+    private GameMapRenderer gameMapRenderer;
+    private KeyboardInputHandler keyboardInputHandler = new KeyboardInputHandler();
+    private CameraManager cameraManager = new CameraManager();
     public GamePanel() {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(Color.GRAY);
         this.setDoubleBuffered(true);
         this.setFocusable(true);
+        this.addKeyListener(keyboardInputHandler);
 
         BufferedImage gameMap = CreateGameMap("src/main/resources/map_data.txt", "src/main/resources/tileset/ashlands_tileset.png");
         gameMapRenderer = new GameMapRenderer(gameMap);
@@ -55,7 +61,7 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     private void update(){
-
+        cameraManager.update();
     }
 
     @Override
