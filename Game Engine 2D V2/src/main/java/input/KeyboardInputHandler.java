@@ -10,11 +10,6 @@ public class KeyboardInputHandler implements KeyListener {
     private static boolean upPressed, downPressed, leftPressed, rightPressed;
 
     @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
 
@@ -48,6 +43,11 @@ public class KeyboardInputHandler implements KeyListener {
         if(keyCode == KeyEvent.VK_D){
             rightPressed = false;
         }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
     }
 
     public static boolean isUpPressed() {

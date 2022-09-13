@@ -13,7 +13,17 @@ public class GameMapGeneration {
     private int numTilesInWorldCol;
     private int numTilesInWorldRow;
 
-    public BufferedImage GenerateMapImage(int[][] tileIndexMatrix, String imageFilePath) throws IOException {
+    public BufferedImage CreateGameMap(String mapDataFilePath, String tilesetFilePath){
+        int[][] tileIndexMatrix = GenerateTileIndexMatrix(mapDataFilePath);
+        BufferedImage gameMapImage = null;
+        try{
+            gameMapImage = GenerateMapImage(tileIndexMatrix, tilesetFilePath);
+        } catch (IOException e) {
+            System.out.println("Error generating map image: " + e.getMessage());
+        }
+        return gameMapImage;
+    }
+    private BufferedImage GenerateMapImage(int[][] tileIndexMatrix, String imageFilePath) throws IOException {
 
 
         BufferedImage tilesetImage = ImageIO.read(new FileInputStream(imageFilePath));
@@ -37,7 +47,7 @@ public class GameMapGeneration {
         mapImage = UtilityTool.scaleImage(mapImage, mapImage.getWidth()*GamePanel.SCALE, mapImage.getHeight()*GamePanel.SCALE);
         return mapImage;
     }
-    public int[][] GenerateTileIndexMatrix(String filePath){
+    private int[][] GenerateTileIndexMatrix(String filePath){
         int[][] tileIndexMatrix = null;
         try{
             File initialFile = new File(filePath);

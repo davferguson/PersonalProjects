@@ -2,27 +2,37 @@ package camera;
 
 import input.KeyboardInputHandler;
 import main.GamePanel;
+import player.Player;
 
 public class CameraManager {
 
     private static int cameraXPos = 0;
     private static int cameraYPos = 0;
+    private Player player;
+    private int playerMoveSpeed;
+
+    public CameraManager(Player player){
+        this.player = player;
+        this.playerMoveSpeed = player.getMoveSpeed();
+    }
 
     public void update(){
-        if(KeyboardInputHandler.isRightPressed()){
-            cameraXPos -= GamePanel.MOVE_SPEED;
-        }
-        if(KeyboardInputHandler.isLeftPressed()){
-            cameraXPos += GamePanel.MOVE_SPEED;
-        }
-        if(!KeyboardInputHandler.isLeftPressed() && !KeyboardInputHandler.isRightPressed()){
-            if(KeyboardInputHandler.isUpPressed()){
-                cameraYPos += GamePanel.MOVE_SPEED;
-            }
-            if(KeyboardInputHandler.isDownPressed()){
-                cameraYPos -= GamePanel.MOVE_SPEED;
-            }
-        }
+        cameraXPos = player.getWorldXPos()-player.getScreenCenterX();
+        cameraYPos = player.getWorldYPos()-player.getScreenCenterY();
+//        if(KeyboardInputHandler.isRightPressed()){
+//            cameraXPos -= playerMoveSpeed;
+//        }
+//        if(KeyboardInputHandler.isLeftPressed()){
+//            cameraXPos += playerMoveSpeed;
+//        }
+//        if(!KeyboardInputHandler.isLeftPressed() && !KeyboardInputHandler.isRightPressed()){
+//            if(KeyboardInputHandler.isUpPressed()){
+//                cameraYPos += playerMoveSpeed;
+//            }
+//            if(KeyboardInputHandler.isDownPressed()){
+//                cameraYPos -= playerMoveSpeed;
+//            }
+//        }
 
     }
 

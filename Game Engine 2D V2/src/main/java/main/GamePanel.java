@@ -3,7 +3,9 @@ package main;
 import camera.CameraManager;
 import game_map.GameMapGeneration;
 import game_map.GameMapRenderer;
+import game_object.TestObject;
 import input.KeyboardInputHandler;
+import player.Player;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,8 +31,12 @@ public class GamePanel extends JPanel implements Runnable{
     private final int FPS = 60;
 
     private GameMapRenderer gameMapRenderer;
+    private GameMapGeneration gameMapGeneration = new GameMapGeneration();
     private KeyboardInputHandler keyboardInputHandler = new KeyboardInputHandler();
-    private CameraManager cameraManager = new CameraManager();
+    private Player player = new Player();
+    private CameraManager cameraManager = new CameraManager(player);
+    private TestObject testObject = new TestObject();
+
     public GamePanel() {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(Color.GRAY);
@@ -38,21 +44,8 @@ public class GamePanel extends JPanel implements Runnable{
         this.setFocusable(true);
         this.addKeyListener(keyboardInputHandler);
 
-        BufferedImage gameMap = CreateGameMap("src/main/resources/map_data.txt", "src/main/resources/tileset/ashlands_tileset.png");
+        BufferedImage gameMap = gameMapGeneration.CreateGameMap("src/main/resources/map_data.txt", "src/main/resources/tileset/ashlands_tileset.png");
         gameMapRenderer = new GameMapRenderer(gameMap);
-    }
-
-    private BufferedImage CreateGameMap(String mapDataFilePath, String tilesetImagePath){
-        GameMapGeneration gameMapGeneration = new GameMapGeneration();
-        int[][] gameMapTileIndexMatrix = gameMapGeneration.GenerateTileIndexMatrix(mapDataFilePath);
-        String imageFilePath = tilesetImagePath;
-        BufferedImage gameMapImage = null;
-        try{
-            gameMapImage = gameMapGeneration.GenerateMapImage(gameMapTileIndexMatrix, imageFilePath);
-        } catch(IOException e){
-            System.out.println("error reading image at path: " + imageFilePath);
-        }
-        return gameMapImage;
     }
 
     public void startGameThread(){
@@ -62,6 +55,8 @@ public class GamePanel extends JPanel implements Runnable{
 
     private void update(){
         cameraManager.update();
+        player.update();
+        testObject.update();
     }
 
     @Override
@@ -76,6 +71,8 @@ public class GamePanel extends JPanel implements Runnable{
         //DRAW
             //PUT DRAW CODE HERE
         gameMapRenderer.draw(g2);
+        testObject.draw(g2);
+        player.draw(g2);
         //END DRAW
 
         //DEBUG
@@ -104,11 +101,6 @@ public class GamePanel extends JPanel implements Runnable{
             if(delta >= 1){
                 update();
                 repaint();
-
-//                if(gameState == GameState.EXITING){
-//                    //updatePlayerPosition();
-//                    System.exit(0);
-//                }
 
                 delta--;
                 drawCount++;
