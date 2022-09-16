@@ -9,7 +9,7 @@ public class AppMain {
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
-        window.setTitle("2D Game V2");
+        window.setTitle("2D Game Engine V2");
 
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);
